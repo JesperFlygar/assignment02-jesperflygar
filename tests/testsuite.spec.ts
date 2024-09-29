@@ -41,5 +41,25 @@ test.describe('Test suite backend V1', () => {
       ])
     )
   });
+  
+  test('Test case 03 - Delete Post by ID', async ({ request }) => {
+    //get all posts in order to access its elements.
+    const getPostsResponse = await request.get('http://localhost:3000/posts');
+    expect (getPostsResponse.ok()).toBeTruthy();
+    const allPosts = await getPostsResponse.json();
+    expect(allPosts.length).toBeGreaterThan(3); 
+    // retrive the id of yhe last but one element in the array
+    const lastButOnePostID = allPosts[allPosts.length - 2].id;
+    
+    //DELETE request
+    const deletePostResponse = await request.delete(`http://localhost:3000/posts/${lastButOnePostID}`); 
+    expect(deletePostResponse.ok()).toBeTruthy(); 
+  
+    // Verify that the elemnt is gone
+    const deletedElementResponse = await request.get(`http://localhost:3000/posts/${lastButOnePostID}`);
+    expect(deletedElementResponse.status()).toBe(404); 
+  });
+
+
 })
 

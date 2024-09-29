@@ -8,3 +8,7 @@ Content-Type: application/json
     "title": "Sic vis pacem para bellum",
     "views": 100
 }
+
+###
+DELETE http://localhost:3000/posts/13
+Content-Type: application/json
