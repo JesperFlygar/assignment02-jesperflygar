@@ -21,9 +21,15 @@ export class APIHelper{
 
     async createPost(request: APIRequestContext, payload: object){
         const response = await request.post(`${this.baseURL}/posts`, {
-            data: JSON.stringify(payload), 
+            data: JSON.stringify(payload),
         })
         return response; 
+    }
+
+    async editPost(request: APIRequestContext, payload: object, postId: number){
+        const respose = await request.put(`${this.baseURL}/posts/${postId}`, {
+            data: JSON.stringify(payload),
+        })
     }
 
     async deletePost(request: APIRequestContext, postId: number){

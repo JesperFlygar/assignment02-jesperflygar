@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { APIHelper } from './apiHelpers';
 import { generateRandomPostPayload } from './testData';
-import { BASE_URL } from './testTarget';
+import { BASE_URL } from '../testTarget'; 
 
 
 test.describe('Test suite backend V1', () => {
@@ -57,6 +57,20 @@ test.describe('Test suite backend V1', () => {
       expect(getPostById.status()).toBe(404); 
 
     }); 
+
+
+    //test case examples? 
+    //get all
+    //create
+    //edit, 1
+    //delete, 1
+    //create create create (bulk?)
+    //delete, 1 delete, 1
+    //create, edit
+    //edit, 1 edit, 1 edit, 1
+    //create, edit, delete 
+    //get 47364764764
+  
 
 
   /*test('Test case 01 - Get all posts', async ({ request }) => {
