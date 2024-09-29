@@ -1,10 +1,54 @@
 import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { title } from 'process';
+import { APIHelper } from './apiHelpers';
+import { generateRandomPostPayload } from './testData';
+
+
+const BASE_URL = 'http://localhost:3000'; 
 
 
 test.describe('Test suite backend V1', () => {
-  test('Test case 01 - Get all posts', async ({ request }) => {
+    let apiHelper: APIHelper;
+
+    test.beforeAll(() => {
+      apiHelper = new APIHelper(BASE_URL);
+    })
+
+    test('Test case 01 - Get all posts - V2', async ({ request }) => {
+      const getPosts = await apiHelper.getAllPosts(request);
+      expect(getPosts.ok()).toBeTruthy(); 
+    }); 
+
+    test('Test case 02 - create post - V2', async ({ request }) => {
+      const payload = generateRandomPostPayload();
+      const createPostResponse = await apiHelper.createPost(request, payload);
+      expect(createPostResponse.ok()).toBeTruthy();
+      
+      // verify from the POST req
+      expect(await createPostResponse.json()).toMatchObject({
+        title: payload.title,
+        views: payload.views
+      }); 
+
+      // GET ALL
+      // verify from the GET req
+      const getPosts = await apiHelper.getAllPosts(request);
+      expect(getPosts.ok()).toBeTruthy(); 
+      expect(await getPosts.json()).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: payload.title, 
+            views: payload.views,
+          })
+        ])
+      )
+    });
+
+
+
+
+  /*test('Test case 01 - Get all posts', async ({ request }) => {
     const getPostsResponse = await request.get('http://localhost:3000/posts');
     expect (getPostsResponse.ok()).toBeTruthy();
     expect (getPostsResponse.status()).toBe(200);
@@ -58,7 +102,7 @@ test.describe('Test suite backend V1', () => {
     // Verify that the elemnt is gone
     const deletedElementResponse = await request.get(`http://localhost:3000/posts/${lastButOnePostID}`);
     expect(deletedElementResponse.status()).toBe(404); 
-  });
+  });*/
 
 
 })
