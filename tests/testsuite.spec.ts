@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { faker } from '@faker-js/faker';
-import { title } from 'process';
 import { APIHelper } from './apiHelpers';
 import { generateRandomPostPayload } from './testData';
-
-
-const BASE_URL = 'http://localhost:3000'; 
+import { BASE_URL } from './testTarget';
 
 
 test.describe('Test suite backend V1', () => {
@@ -46,6 +42,21 @@ test.describe('Test suite backend V1', () => {
     });
 
 
+    test('Test case 03 - delete post - V2', async ({ request }) => {
+      const getPosts = await apiHelper.getAllPosts(request);
+      expect(getPosts.ok()).toBeTruthy(); 
+      const allPosts = await getPosts.json();
+      const lastButOneID = allPosts[allPosts.length - 2].id;
+      
+      // DELETE REQ
+      const deleteReqeust = await apiHelper.deletePost(request, lastButOneID); 
+      expect(deleteReqeust.ok()).toBeTruthy(); 
+
+      // GET by ID and verify status as 404
+      const getPostById = await apiHelper.getByID(request, lastButOneID);
+      expect(getPostById.status()).toBe(404); 
+
+    }); 
 
 
   /*test('Test case 01 - Get all posts', async ({ request }) => {

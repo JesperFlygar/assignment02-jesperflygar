@@ -14,10 +14,20 @@ export class APIHelper{
         return response; 
     }
 
+    async getByID(request: APIRequestContext, postId: number){
+        const response = await request.get(`${this.baseURL}/posts/${postId}`);
+        return response; 
+    }
+
     async createPost(request: APIRequestContext, payload: object){
         const response = await request.post(`${this.baseURL}/posts`, {
             data: JSON.stringify(payload), 
         })
+        return response; 
+    }
+
+    async deletePost(request: APIRequestContext, postId: number){
+        const response = await request.delete(`${this.baseURL}/posts/${postId}`);
         return response; 
     }
 }
