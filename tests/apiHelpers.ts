@@ -19,6 +19,13 @@ export class APIHelper{
         return response; 
     }
 
+    async login(request: APIRequestContext, payload: object){
+        const response = await request.post(`${this.baseURL}/api/login`, {
+            data: JSON.stringify(payload, () => {}, 2),
+        })
+        return response; 
+    }
+
     async createPost(request: APIRequestContext, payload: object){
         const response = await request.post(`${this.baseURL}/api/room/new`, {
             data: JSON.stringify(payload),

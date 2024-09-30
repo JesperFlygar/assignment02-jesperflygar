@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { APIHelper } from './apiHelpers';
-import { createRandomRoom, generateRandomPostPayload } from './testData';
+import { createRandomRoom, generateRandomPostPayload, loginInformation } from './testData';
 import { BASE_URL } from '../testTarget'; 
 
 
@@ -10,6 +10,12 @@ test.describe('Test suite backend V1', () => {
     test.beforeAll(() => {
       apiHelper = new APIHelper(BASE_URL);
     })
+
+    test.beforeEach( async ({request}) => {
+      const preformLogin = loginInformation(); 
+      const loginResponse = await apiHelper.login(request, preformLogin);
+      expect(loginResponse.ok()).toBeTruthy();
+  })
     
 
     test('Test case 01 - Get all posts - V2', async ({ request }) => {
