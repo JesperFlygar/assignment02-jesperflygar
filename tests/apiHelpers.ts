@@ -20,7 +20,7 @@ export class APIHelper{
     }
 
     async createPost(request: APIRequestContext, payload: object){
-        const response = await request.post(`${this.baseURL}/posts`, {
+        const response = await request.post(`${this.baseURL}/api/room/new`, {
             data: JSON.stringify(payload),
         })
         return response; 

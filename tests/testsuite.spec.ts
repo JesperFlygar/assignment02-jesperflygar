@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { APIHelper } from './apiHelpers';
-import { generateRandomPostPayload } from './testData';
+import { createRandomRoom, generateRandomPostPayload } from './testData';
 import { BASE_URL } from '../testTarget'; 
 
 
@@ -10,11 +10,26 @@ test.describe('Test suite backend V1', () => {
     test.beforeAll(() => {
       apiHelper = new APIHelper(BASE_URL);
     })
+    
 
     test('Test case 01 - Get all posts - V2', async ({ request }) => {
       const getPosts = await apiHelper.getAllPosts(request);
       expect(getPosts.ok()).toBeTruthy(); 
     }); 
+
+
+    
+    test('Create Room Backend', async ({ request }) => {
+      const createRoom = createRandomRoom(); 
+      const createPostResponse = await apiHelper.createPost(request, createRoom);
+      expect(createPostResponse.ok()).toBeTruthy();
+
+      const getPosts = await apiHelper.getAllPosts(request);
+      expect(getPosts.ok()).toBeTruthy(); 
+
+    });
+      
+
 
     test('Test case 02 - create post - V2', async ({ request }) => {
       const payload = generateRandomPostPayload();
@@ -64,14 +79,7 @@ test.describe('Test suite backend V1', () => {
     //create
     //edit, 1
     //delete, 1
-    //create create create (bulk?)
-    //delete, 1 delete, 1
-    //create, edit
-    //edit, 1 edit, 1 edit, 1
-    //create, edit, delete 
-    //get 47364764764
   
-
 
   /*test('Test case 01 - Get all posts', async ({ request }) => {
     const getPostsResponse = await request.get('http://localhost:3000/posts');
@@ -130,5 +138,4 @@ test.describe('Test suite backend V1', () => {
   });*/
 
 
-})
-
+}); 

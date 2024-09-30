@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "npx json-server db.json",
+    "serve": "npx json-server db.json -p 5000",
     "ui-mode": "npx playwright test --ui"
   },
   "keywords": [],
