@@ -21,14 +21,14 @@ export class APIHelper{
 
     async login(request: APIRequestContext, payload: object){
         const response = await request.post(`${this.baseURL}/api/login`, {
-            data: JSON.stringify(payload, () => {}, 2),
+            data: payload,
         })
         return response; 
     }
 
-    async createPost(request: APIRequestContext, payload: object){
-        const response = await request.post(`${this.baseURL}/api/room/new`, {
-            data: JSON.stringify(payload),
+    async createPost(request: APIRequestContext, target: string, payload: object){
+        const response = await request.post(`${this.baseURL}/api/${target}/new`, {
+            data: payload, 
         })
         return response; 
     }

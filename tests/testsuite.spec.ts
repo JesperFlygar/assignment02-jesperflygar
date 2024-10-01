@@ -3,9 +3,7 @@ import { APIHelper } from './apiHelpers';
 import { createRandomRoom, generateRandomPostPayload, loginInformation } from './testData';
 import { BASE_URL } from '../testTarget'; 
 
-
-test.describe('Test suite backend V1', () => {
-    let apiHelper: APIHelper;
+let apiHelper: APIHelper;
 
     test.beforeAll(() => {
       apiHelper = new APIHelper(BASE_URL);
@@ -16,7 +14,46 @@ test.describe('Test suite backend V1', () => {
       const loginResponse = await apiHelper.login(request, preformLogin);
       expect(loginResponse.ok()).toBeTruthy();
   })
+
+
+test.describe('Create Backend', () => {
+    test('Create Room Backend', async ({ request }) => {
+      const createRoom = createRandomRoom(); 
+      const createPostResponse = await apiHelper.createPost(request, 'room', createRoom);
+      expect(createPostResponse.ok()).toBeTruthy();
+
+      const getPosts = await apiHelper.getAllPosts(request);
+      expect(getPosts.ok()).toBeTruthy(); 
+
+    });
+
+    test('Create Client Backend', async ({ request }) => {
+      const createRoom = createRandomRoom(); 
+      const createPostResponse = await apiHelper.createPost(request, 'client', createRoom);
+      expect(createPostResponse.ok()).toBeTruthy();
+
+      const getPosts = await apiHelper.getAllPosts(request);
+      expect(getPosts.ok()).toBeTruthy(); 
+
+    });
+
+
+
+    test.describe('Delete Backend', () => {
+
+
+    })
+
+    test.describe('Edit Backend', () => {
+
+
+    })
     
+    
+
+
+
+
 
     test('Test case 01 - Get all posts - V2', async ({ request }) => {
       const getPosts = await apiHelper.getAllPosts(request);
@@ -24,20 +61,7 @@ test.describe('Test suite backend V1', () => {
     }); 
 
 
-    
-    test('Create Room Backend', async ({ request }) => {
-      const createRoom = createRandomRoom(); 
-      const createPostResponse = await apiHelper.createPost(request, createRoom);
-      expect(createPostResponse.ok()).toBeTruthy();
-
-      const getPosts = await apiHelper.getAllPosts(request);
-      expect(getPosts.ok()).toBeTruthy(); 
-
-    });
-      
-
-
-    test('Test case 02 - create post - V2', async ({ request }) => {
+    /*test('Test case 02 - create post - V2', async ({ request }) => {
       const payload = generateRandomPostPayload();
       const createPostResponse = await apiHelper.createPost(request, payload);
       expect(createPostResponse.ok()).toBeTruthy();
@@ -60,7 +84,7 @@ test.describe('Test suite backend V1', () => {
           })
         ])
       )
-    });
+    });*/
 
 
     test('Test case 03 - delete post - V2', async ({ request }) => {

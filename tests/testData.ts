@@ -51,3 +51,33 @@ export const createRandomRoom = () => {
             features: featureList
     }
 }
+
+export const createRandomClient = () => {
+    return {
+        name:  faker.person.fullName(),
+        email: faker.internet.email(),
+        telephone: faker.phone.number()
+      }
+}
+
+let billPaid = false; 
+if (faker.number.int({min:0, max:1}) == 1){
+    billPaid = true;
+}
+
+export const createRandomBill = () => {
+    return {
+        value: faker.helpers.rangeToNumber({ min: 1, max: 999999999 }),
+        paid: billPaid
+      }
+}
+
+export const createRandomRservation = () => {7
+    return {
+        client: 1,
+        room: 2,
+        bill: 1,
+        start: faker.date.recent(),
+        end: faker.date.soon()
+      }
+}
