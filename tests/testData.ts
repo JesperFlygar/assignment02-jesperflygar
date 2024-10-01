@@ -12,7 +12,7 @@ export const loginInformation = () => {
         "username": "tester01",
         "password": "GteteqbQQgSr88SwNExUQv2ydb7xuf8c"
         }
-        
+    
         //"username": `${process.env.TEST_USERNAME}`,
         //"password": `${process.env.TEST_PASSWORD}` 
       

@@ -2,6 +2,7 @@ import { APIRequestContext } from "playwright-core";
 
 export class APIHelper{
     private baseURL: string;
+    private token: string; 
 
     constructor(baseURL: string){
         this.baseURL = baseURL; 
@@ -23,12 +24,23 @@ export class APIHelper{
         const response = await request.post(`${this.baseURL}/api/login`, {
             data: payload,
         })
+        if (!response.ok) {
+            throw new Error(`Login failed: ${response.statusText}`);
+        }
+
+        let responseToken = await response.json();
+        this.token = responseToken.token; 
+        console.log(this.token); 
         return response; 
     }
 
     async createPost(request: APIRequestContext, target: string, payload: object){
         const response = await request.post(`${this.baseURL}/api/${target}/new`, {
-            data: payload, 
+            data: JSON.stringify(payload),
+            headers: {
+                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
+                'Content-Type': 'application/json'
+            } 
         })
         return response; 
     }
