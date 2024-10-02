@@ -8,14 +8,11 @@ export const generateRandomPostPayload = () => {
 }
 
 export const loginInformation = () => {
+    require('dotenv').config();
     return {
-        "username": "tester01",
-        "password": "GteteqbQQgSr88SwNExUQv2ydb7xuf8c"
-        }
-    
-        //"username": `${process.env.TEST_USERNAME}`,
-        //"password": `${process.env.TEST_PASSWORD}` 
-      
+        "username": `${process.env.TEST_USERNAME}`,
+        "password": `${process.env.TEST_PASSWORD}` 
+        }   
 }
 
 export const createRandomRoom = () => {
@@ -72,9 +69,9 @@ export const createRandomBill = () => {
       }
 }
 
-export const createRandomRservation = () => {7
+export const createRandomReservation = () => {
     return {
-        client: 1,
+        client: 1, //length of lists so we can use faker to randomize (dont know how to get length)
         room: 2,
         bill: 1,
         start: faker.date.recent(),
