@@ -16,7 +16,7 @@ test.beforeEach(async ({ request }) => {
 })
 
 
-test.describe('Create Backend', () => { // gör assertions (som i exemplet längre ner)
+test.describe('Create Backend', () => { // gör assertions (som i exemplet längre ner för respektive) och korta ned koden till besta förmåga
   test('Create Room Backend', async ({ request }) => {
     const createRoom = createRandomRoom();
     const createPostResponse = await apiHelper.createPost(request, 'room', createRoom);
@@ -33,7 +33,6 @@ test.describe('Create Backend', () => { // gör assertions (som i exemplet läng
 
     const getPosts = await apiHelper.getAllPosts(request);
     expect(getPosts.ok()).toBeTruthy();
-
   });
 
   test('Create Bill Backend', async ({ request }) => {
