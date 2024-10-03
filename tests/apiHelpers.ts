@@ -8,13 +8,23 @@ export class APIHelper {
         this.baseURL = baseURL;
     }
 
-    async getAllPosts(request: APIRequestContext) {
-        const response = await request.get(`${this.baseURL}/posts`);
+    async getAllPosts(request: APIRequestContext, target: string) {
+        const response = await request.get(`${this.baseURL}/api/${target}`, {
+            headers: {
+                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
+                'Content-Type': 'application/json'
+            }
+        });
         return response;
     }
 
-    async getByID(request: APIRequestContext, postId: number) {
-        const response = await request.get(`${this.baseURL}/posts/${postId}`);
+    async getByID(request: APIRequestContext, target: string, postId: number) {
+        const response = await request.get(`${this.baseURL}/api/${target}/${postId}`, {
+            headers: {
+                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
+                'Content-Type': 'application/json'
+            }
+        });
         return response;
     }
 
