@@ -8,22 +8,16 @@ export class APIHelper {
         this.baseURL = baseURL;
     }
 
-    async getAllPosts(request: APIRequestContext, target: string) {
-        const response = await request.get(`${this.baseURL}/api/${target}`, {
-            headers: {
-                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        return response;
+    getHeader(){
+        return {
+            'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
+            'Content-Type': 'application/json'
+        }
     }
 
-    async getByID(request: APIRequestContext, target: string, postId: number) {
-        const response = await request.get(`${this.baseURL}/api/${target}/${postId}`, {
-            headers: {
-                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
-                'Content-Type': 'application/json'
-            }
+    async getAllPosts(request: APIRequestContext, target: string) {
+        const response = await request.get(`${this.baseURL}/api/${target}`, {
+            headers: this.getHeader()
         });
         return response;
     }
@@ -42,23 +36,24 @@ export class APIHelper {
         return response;
     }
 
+    async logout(request: APIRequestContext) {
+        const response = await request.post(`${this.baseURL}/api/logout`, {
+            headers: this.getHeader()
+        })
+        return response; 
+    }
+
     async createPost(request: APIRequestContext, target: string, payload: object) {
         const response = await request.post(`${this.baseURL}/api/${target}/new`, {
             data: JSON.stringify(payload),
-            headers: {
-                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
-                'Content-Type': 'application/json'
-            }
+            headers: this.getHeader()
         })
         return response;
     }
 
     async deletePostById(request: APIRequestContext, target: string, postId: number) {
         const response = await request.delete(`${this.baseURL}/api/${target}/${postId}`, {
-            headers: {
-                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
-                'Content-Type': 'application/json'
-            }
+            headers: this.getHeader()
         });
         return response;
     }
@@ -66,10 +61,7 @@ export class APIHelper {
     async editPostById(request: APIRequestContext, target: string, payload: object, postId: number) {
         const response = await request.put(`${this.baseURL}/api/${target}/${postId}`, {
             data: JSON.stringify(payload),
-            headers: {
-                'X-User-Auth': `{"username":"tester01", "token": "${this.token}"}`,
-                'Content-Type': 'application/json'
-            }
+            headers: this.getHeader()
         })
         return response;
     }

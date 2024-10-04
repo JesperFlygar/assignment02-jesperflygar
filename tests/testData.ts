@@ -74,7 +74,7 @@ export const createRandomReservation = () => {
         client: 1,
         room: 1,
         bill: 1,
-        start: faker.date.recent(),
-        end: faker.date.soon()
+        start: faker.date.recent().toLocaleDateString(),
+        end: faker.date.soon().toLocaleDateString()
     }
 }

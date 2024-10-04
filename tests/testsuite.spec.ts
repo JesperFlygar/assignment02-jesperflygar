@@ -15,7 +15,13 @@ test.beforeEach(async ({ request }) => {
   expect(loginResponse.ok()).toBeTruthy();
 })
 
+test.afterEach(async ({ request }) => { 
+  const logoutResponse = await apiHelper.logout(request);
+  expect(logoutResponse.ok()).toBeTruthy(); 
+})
+
 test.describe('Create Backend', () => {
+
   test('Create Room Backend', async ({ request }) => {
     const createRoom = createRandomRoom();
     const createPostResponse = await apiHelper.createPost(request, 'room', createRoom);
@@ -61,7 +67,7 @@ test.describe('Create Backend', () => {
     );
   });
 
-  test('Create Reservation Backend', async ({ request }) => {//doesnt work for some reason for now
+  test('Create Reservation Backend', async ({ request }) => {
     const createReservation = createRandomReservation();
     const createPostResponse = await apiHelper.createPost(request, 'reservation', createReservation);
     expect(createPostResponse.ok()).toBeTruthy();
@@ -78,6 +84,7 @@ test.describe('Create Backend', () => {
 });
 
 test.describe('Delete Backend', () => {
+
   test('Delete Room Backend', async ({ request }) => {
     const deleteRoom = 1;
     const listRooms1 = await (await apiHelper.getAllPosts(request, 'rooms')).json();
@@ -116,6 +123,7 @@ test.describe('Delete Backend', () => {
 });
 
 test.describe('Edit Backend', () => {
+  
   test('Edit Room Backend', async ({ request }) => {
     const editRoom = 1
     await apiHelper.getAllPosts(request, 'rooms');
