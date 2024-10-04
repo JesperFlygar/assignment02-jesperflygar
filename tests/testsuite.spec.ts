@@ -15,19 +15,13 @@ test.beforeEach(async ({ request }) => {
   expect(loginResponse.ok()).toBeTruthy();
 })
 
-test('GET', async ({ request }) => {
-  const createGET = await apiHelper.getAllPosts(request, 'rooms');
-  expect(createGET.ok()).toBeTruthy();
-})
-
-
 test.describe('Create Backend', () => {
   test('Create Room Backend', async ({ request }) => {
     const createRoom = createRandomRoom();
     const createPostResponse = await apiHelper.createPost(request, 'room', createRoom);
     expect(createPostResponse.ok()).toBeTruthy();
 
-    expect(await createPostResponse.json()).toMatchObject(createRoom); 
+    expect(await createPostResponse.json()).toMatchObject(createRoom);
     const getPosts = await apiHelper.getAllPosts(request, 'rooms');
     expect(getPosts.ok()).toBeTruthy();
     expect(await getPosts.json()).toEqual(
@@ -42,21 +36,12 @@ test.describe('Create Backend', () => {
     const createPostResponse = await apiHelper.createPost(request, 'client', createClient);
     expect(createPostResponse.ok()).toBeTruthy();
 
-    expect(await createPostResponse.json()).toMatchObject({
-      name: createClient.name,
-      email: createClient.email,
-      telephone: createClient.telephone
-    });
-
+    expect(await createPostResponse.json()).toMatchObject(createClient);
     const getPosts = await apiHelper.getAllPosts(request, 'clients');
     expect(getPosts.ok()).toBeTruthy();
     expect(await getPosts.json()).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          name: createClient.name,
-          email: createClient.email,
-          telephone: createClient.telephone
-        })
+        expect.objectContaining(createClient)
       ])
     );
   });
@@ -66,87 +51,67 @@ test.describe('Create Backend', () => {
     const createPostResponse = await apiHelper.createPost(request, 'bill', createBill);
     expect(createPostResponse.ok()).toBeTruthy();
 
-    expect(await createPostResponse.json()).toMatchObject({
-      value: createBill.value,
-      paid: createBill.paid
-    });
-
+    expect(await createPostResponse.json()).toMatchObject(createBill);
     const getPosts = await apiHelper.getAllPosts(request, 'bills');
     expect(getPosts.ok()).toBeTruthy();
     expect(await getPosts.json()).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          value: createBill.value,
-          paid: createBill.paid
-        })
+        expect.objectContaining(createBill)
       ])
     );
   });
 
-  test('Create Reservation Backend', async ({ request }) => {
+  test('Create Reservation Backend', async ({ request }) => {//doesnt work for some reason for now
     const createReservation = createRandomReservation();
     const createPostResponse = await apiHelper.createPost(request, 'reservation', createReservation);
     expect(createPostResponse.ok()).toBeTruthy();
 
-    expect(await createPostResponse.json()).toMatchObject({
-      client: createReservation.client,
-      room: createReservation.room,
-      bill: createReservation.bill,
-      start: createReservation.start,
-      end: createReservation.end
-    });
-
+    expect(await createPostResponse.json()).toMatchObject(createReservation);
     const getPosts = await apiHelper.getAllPosts(request, 'reservations');
     expect(getPosts.ok()).toBeTruthy();
     expect(await getPosts.json()).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          client: createReservation.client,
-          room: createReservation.room,
-          bill: createReservation.bill,
-          start: createReservation.start,
-          end: createReservation.end
-        })
+        expect.objectContaining(createReservation)
       ])
     );
   });
 });
 
-test.describe('Delete Backend', () => { 
+test.describe('Delete Backend', () => {
   test('Delete Room Backend', async ({ request }) => {
     const deleteRoom = 1;
     const listRooms1 = await (await apiHelper.getAllPosts(request, 'rooms')).json();
     const deletePostResponse = await apiHelper.deletePostById(request, 'room', deleteRoom);
     expect(deletePostResponse.ok()).toBeTruthy();
     const listRooms2 = await (await apiHelper.getAllPosts(request, 'rooms')).json();
-    expect(listRooms2.length).toEqual(listRooms1.length-1); 
+    expect(listRooms2.length).toEqual(listRooms1.length - 1);
   });
 
   test('Delete Client Backend', async ({ request }) => {
     const deleteClient = 1;
+    const listClients1 = await (await apiHelper.getAllPosts(request, 'clients')).json();
     const deletePostResponse = await apiHelper.deletePostById(request, 'client', deleteClient);
     expect(deletePostResponse.ok()).toBeTruthy();
-
-    const getPosts = await apiHelper.getAllPosts(request, 'clients');
-    expect(getPosts.ok()).toBeTruthy();
+    const listClients2 = await (await apiHelper.getAllPosts(request, 'clients')).json();
+    expect(listClients2.length).toEqual(listClients1.length - 1);
   });
 
   test('Delete Bill Backend', async ({ request }) => {
     const deleteBill = 1;
+    const listBills1 = await (await apiHelper.getAllPosts(request, 'bills')).json();
     const deletePostResponse = await apiHelper.deletePostById(request, 'bill', deleteBill);
     expect(deletePostResponse.ok()).toBeTruthy();
-
-    const getPosts = await apiHelper.getByID(request, 'bills', deleteBill);
-    expect(getPosts.status()).toBe(404); 
+    const listBills2 = await (await apiHelper.getAllPosts(request, 'bills')).json();
+    expect(listBills2.length).toEqual(listBills1.length - 1);
   });
 
   test('Delete Reservation Backend', async ({ request }) => {
     const deleteReservation = 1;
+    const listReservations1 = await (await apiHelper.getAllPosts(request, 'reservations')).json();
     const deletePostResponse = await apiHelper.deletePostById(request, 'reservation', deleteReservation);
     expect(deletePostResponse.ok()).toBeTruthy();
-
-    const getPosts = await apiHelper.getAllPosts(request, 'reservations');
-    expect(getPosts.ok()).toBeTruthy();
+    const listReservations2 = await (await apiHelper.getAllPosts(request, 'reservations')).json();
+    expect(listReservations2.length).toEqual(listReservations1.length - 1);
   });
 });
 
@@ -154,60 +119,72 @@ test.describe('Edit Backend', () => {
   test('Edit Room Backend', async ({ request }) => {
     const editRoom = 1
     await apiHelper.getAllPosts(request, 'rooms');
-    const createRoom = createRandomRoom(); 
+    const createRoom = createRandomRoom();
     createRoom["id"] = editRoom;
     const editPostResponse = await apiHelper.editPostById(request, 'room', createRoom, editRoom);
     expect(editPostResponse.ok()).toBeTruthy();
 
-    expect(await editPostResponse.json()).toMatchObject({
-      category: createRoom.category,
-      floor: createRoom.floor,
-      number: createRoom.number,
-      available: createRoom.available,
-      price: createRoom.price,
-      features: createRoom.features
-    });
-
+    expect(await editPostResponse.json()).toMatchObject(createRoom);
     const getPosts = await apiHelper.getAllPosts(request, 'rooms');
     expect(getPosts.ok()).toBeTruthy();
     expect(await getPosts.json()).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          category: createRoom.category,
-          floor: createRoom.floor,
-          number: createRoom.number,
-          available: createRoom.available,
-          price: createRoom.price,
-          features: createRoom.features
-        })
+        expect.objectContaining(createRoom)
       ])
     );
   });
 
   test('Edit Client Backend', async ({ request }) => {
+    const editClient = 1
+    await apiHelper.getAllPosts(request, 'rooms');
     const createClient = createRandomClient();
-    const editPostResponse = await apiHelper.editPostById(request, 'client', createClient, 1);
+    createClient["id"] = editClient;
+    const editPostResponse = await apiHelper.editPostById(request, 'client', createClient, editClient);
     expect(editPostResponse.ok()).toBeTruthy();
 
+    expect(await editPostResponse.json()).toMatchObject(createClient);
     const getPosts = await apiHelper.getAllPosts(request, 'clients');
     expect(getPosts.ok()).toBeTruthy();
+    expect(await getPosts.json()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(createClient)
+      ])
+    );
   });
 
   test('Edit Bill Backend', async ({ request }) => {
+    const editBill = 1
+    await apiHelper.getAllPosts(request, 'bills');
     const createBill = createRandomBill();
-    const editPostResponse = await apiHelper.editPostById(request, 'bill', createBill, 1);
+    createBill["id"] = editBill;
+    const editPostResponse = await apiHelper.editPostById(request, 'bill', createBill, editBill);
     expect(editPostResponse.ok()).toBeTruthy();
 
+    expect(await editPostResponse.json()).toMatchObject(createBill);
     const getPosts = await apiHelper.getAllPosts(request, 'bills');
     expect(getPosts.ok()).toBeTruthy();
+    expect(await getPosts.json()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(createBill)
+      ])
+    );
   });
 
   test('Edit Reservation Backend', async ({ request }) => {
-    const createReservation = createRandomReservation();
-    const editPostResponse = await apiHelper.editPostById(request, 'reservation', createReservation, 1);
+    const editReservation = 1
+    await apiHelper.getAllPosts(request, 'rooms');
+    const createReservation = createRandomClient();
+    createReservation["id"] = editReservation;
+    const editPostResponse = await apiHelper.editPostById(request, 'reservation', createReservation, editReservation);
     expect(editPostResponse.ok()).toBeTruthy();
 
+    expect(await editPostResponse.json()).toMatchObject(createReservation);
     const getPosts = await apiHelper.getAllPosts(request, 'reservations');
     expect(getPosts.ok()).toBeTruthy();
+    expect(await getPosts.json()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(createReservation)
+      ])
+    );
   });
-});
+}); 
